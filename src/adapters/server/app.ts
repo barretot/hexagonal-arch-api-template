@@ -1,19 +1,15 @@
 import fastify from 'fastify'
-import autoload from '@fastify/autoload'
-import { join } from 'path'
 
 import { ZodError } from 'zod'
 import { env } from '@/config'
+import { userRoutes } from '../http/routes/user-routes'
+import { registerPlugins } from './fastify/plugins'
 
 export const app = fastify()
 
-app.register(autoload, { dir: join(__dirname, 'fastify', 'plugins') })
+registerPlugins(app)
 
-console.log(join(__dirname, '..', 'http', 'routes'))
-
-app.register(autoload, {
-  dir: join(__dirname, '..', 'http', 'routes'),
-  dirNameRoutePrefix: false,
+app.register(userRoutes, {
   prefix: '/api',
 })
 

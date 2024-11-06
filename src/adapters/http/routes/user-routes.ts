@@ -1,21 +1,22 @@
-import { FastifyInstance } from 'fastify'
-import { UserController } from '../controllers/register'
+import { FastifyInstance, RouteOptions } from 'fastify'
+import { UserController } from '../controllers/register-controller/register'
+import { registerSchema } from '../schemas/user-schemas/register'
 
-export class UserRoutes {
-  private userController: UserController
+const userController = new UserController()
 
-  constructor() {
-    this.userController = new UserController()
-  }
+const routes: RouteOptions[] = [
+  {
+    method: 'POST',
+    url: '/users',
+    schema: {
+      tags: ['Users'],
+      summary: '',
+      description: '',
+      ...registerSchema,
+    },
+    handler: (request, reply) => userController.register(request, reply),
+  },
+]
 
-  public register(fastify: FastifyInstance) {
-    fastify.post('/users', (request, reply) =>
-      this.userController.createUser(request, reply),
-    )
-  }
-}
-
-export default async function (fastify: FastifyInstance) {
-  const userRoutes = new UserRoutes()
-  userRoutes.register(fastify)
-}
+export const userRoutes = async (fastify: FastifyInstance) =>
+  routes.forEach((route) => fastify.route(route))

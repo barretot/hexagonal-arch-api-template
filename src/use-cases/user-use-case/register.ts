@@ -1,5 +1,5 @@
-import { UserRepository } from '../../domain/repositories/UserRepository'
-import { User } from '../../domain/entities/User'
+import { UserRepository } from '@/domain/repositories/UserRepository'
+import { User } from '@/domain/entities/User'
 
 interface RegisterUseCaseRequest {
   name: string
@@ -7,6 +7,9 @@ interface RegisterUseCaseRequest {
   password: string
 }
 
+interface RegisterUseCaseResponse {
+  user: User
+}
 export class CreateUserUseCase {
   constructor(private userRepository: UserRepository) {}
 
@@ -14,8 +17,11 @@ export class CreateUserUseCase {
     name,
     email,
     password,
-  }: RegisterUseCaseRequest): Promise<User> {
-    const user = await this.userRepository.create({ name, email, password })
-    return user
+  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
+    const userEntity = User.CreateEntity({ name, email, password })
+
+    const user = await this.userRepository.create(userEntity)
+
+    return { user }
   }
 }

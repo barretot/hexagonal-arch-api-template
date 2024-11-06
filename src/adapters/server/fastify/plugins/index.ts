@@ -6,7 +6,6 @@ import { FastifyInstance } from 'fastify'
 
 export async function registerPlugins(fastify: FastifyInstance) {
   swagger(fastify)
-
   fastify.register(cors)
   fastify.register(healthcheck)
 }

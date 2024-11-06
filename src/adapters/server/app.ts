@@ -1,6 +1,5 @@
 import fastify from 'fastify'
 
-import { ZodError } from 'zod'
 import { env } from '@/config'
 import { userRoutes } from '../http/routes/user-routes'
 import { registerPlugins } from './fastify/plugins'
@@ -14,10 +13,8 @@ app.register(userRoutes, {
 })
 
 app.setErrorHandler((error, _, reply) => {
-  if (error instanceof ZodError) {
-    return reply
-      .status(400)
-      .send({ message: 'Validation error', issues: error.format() })
+  if (error instanceof Error) {
+    return reply.send(error)
   }
 
   if (env.NODE_ENV !== 'prd') {

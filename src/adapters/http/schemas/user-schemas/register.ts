@@ -1,13 +1,7 @@
+import { registerBodyJsonSchema } from '../../validations/user-validations/register'
+
 export const registerSchema = {
-  body: {
-    type: 'object',
-    properties: {
-      name: { type: 'string' },
-      email: { type: 'string' },
-      password: { type: 'string' },
-    },
-    required: ['name', 'email', 'password'],
-  },
+  body: registerBodyJsonSchema,
   response: {
     201: {
       description: 'User created',
